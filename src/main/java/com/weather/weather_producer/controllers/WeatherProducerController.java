@@ -1,14 +1,12 @@
 package com.weather.weather_producer.controllers;
 
 import com.weather.weather_producer.services.WeatherProducerService;
-import com.weather.weather_producer.openmeteo.WeatherHourData;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import java.util.List;
 
 @RestController
 @RequestMapping("/weather")
@@ -27,15 +25,16 @@ public class WeatherProducerController {
 
     @PostMapping("/sendMessage")
     public String sendMessage(@RequestBody String message) {
-        weatherProducerService.sendMessage(message);
         return "Mensagem enviada com sucesso!";
     }
 
-    @GetMapping("/forecast")
-    public List<WeatherHourData> getWeather(
-            @RequestParam double lat,
-            @RequestParam double lon
+    @Scheduled(fixedRate = 45000)
+    public String fetchAndStoreWeather(
     ) {
-        return weatherProducerService.getWeather(lat, lon);
+        double latitude = -23.5505;
+        double longitude = -46.6333;
+        var parsedData = weatherProducerService.getWeather(latitude, longitude).toString();;
+        weatherProducerService.sendToConsumer(parsedData);
+        return parsedData;
     }
 }

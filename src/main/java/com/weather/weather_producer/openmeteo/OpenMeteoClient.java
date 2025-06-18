@@ -80,7 +80,7 @@ public class OpenMeteoClient {
 
         for (int i = 0; i < times.size(); i++) {
             LocalDateTime ldt = LocalDateTime.parse(times.get(i), formatter);
-            Instant instant = ldt.toInstant(ZoneOffset.UTC); // ou o fuso que for correto
+            Instant instant = ldt.toInstant(ZoneOffset.UTC);
             list.add(new WeatherHourData(
                     instant,
                     temperature2m.get(i),

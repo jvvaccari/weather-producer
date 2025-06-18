@@ -1,6 +1,6 @@
 package com.weather.weather_producer.services;
 
-import com.weather.weather_producer.config.RabbitMQConfig;
+import com.weather.weather_producer.RabbitMQConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import com.weather.weather_producer.openmeteo.OpenMeteoClient;
@@ -19,8 +19,8 @@ public class WeatherProducerService {
         this.openMeteoClient = openMeteoClient;
     }
 
-    public void sendMessage(String message) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_NAME, message);
+    public void sendToConsumer(String data) {
+        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_NAME, data);
     }
 
     public List<WeatherHourData> getWeather(double lat, double lon) {
