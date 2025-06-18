@@ -29,12 +29,11 @@ public class WeatherProducerController {
     }
 
     @Scheduled(fixedRate = 45000)
-    public String fetchAndStoreWeather(
+    public void fetchAndStoreWeather(
     ) {
-        double latitude = -23.5505;
-        double longitude = -46.6333;
-        var parsedData = weatherProducerService.getWeather(latitude, longitude).toString();;
+        double latitude = 90.0;
+        double longitude = 0.0;
+        var parsedData = weatherProducerService.getWeather(latitude, longitude).toString();
         weatherProducerService.sendToConsumer(parsedData);
-        return parsedData;
     }
 }
