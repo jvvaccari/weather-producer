@@ -8,14 +8,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
+
 @RestController
 @RequestMapping("/weather")
 public class WeatherProducerController {
 
     private final WeatherProducerService weatherProducerService;
+    private final ObjectMapper objectMapper;
 
-    public WeatherProducerController(WeatherProducerService weatherProducerService){
+    @Autowired
+    public WeatherProducerController(WeatherProducerService weatherProducerService,ObjectMapper objectMapper){
         this.weatherProducerService = weatherProducerService;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping
@@ -23,17 +32,18 @@ public class WeatherProducerController {
         return "API - Weather Producer";
     }
 
-    @PostMapping("/sendMessage")
-    public String sendMessage(@RequestBody String message) {
-        return "Mensagem enviada com sucesso!";
-    }
-
     @Scheduled(fixedRate = 45000)
     public void fetchAndStoreWeather(
     ) {
         double latitude = 90.0;
         double longitude = 0.0;
-        var parsedData = weatherProducerService.getWeather(latitude, longitude).toString();
-        weatherProducerService.sendToConsumer(parsedData);
+        var data = weatherProducerService.getWeather(latitude, longitude);
+
+        try {
+            String jsonData = objectMapper.writeValueAsString(data);
+            weatherProducerService.sendToConsumer(jsonData);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }

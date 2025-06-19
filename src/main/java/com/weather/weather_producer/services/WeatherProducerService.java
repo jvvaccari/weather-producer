@@ -10,7 +10,6 @@ import java.util.List;
 
 @Service
 public class WeatherProducerService {
-
     private final RabbitTemplate rabbitTemplate;
     private final OpenMeteoClient openMeteoClient;
 
@@ -19,12 +18,11 @@ public class WeatherProducerService {
         this.openMeteoClient = openMeteoClient;
     }
 
-    public void sendToConsumer(String data) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_NAME, data);
+    public void sendToConsumer(String message) {
+        rabbitTemplate.convertAndSend("weather.exchange", "", message);
     }
 
     public List<WeatherHourData> getWeather(double lat, double lon) {
         return openMeteoClient.fetchHourlyWeather(lat, lon);
     }
-
 }
