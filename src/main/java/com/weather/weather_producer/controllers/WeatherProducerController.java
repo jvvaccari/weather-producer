@@ -35,8 +35,15 @@ public class WeatherProducerController {
     @Scheduled(fixedRate = 30000)
     public void fetchAndStoreWeather(
     ) {
-        double latitude = 90.0;
-        double longitude = 0.0;
+        // Polo Norte
+
+        //double latitude = 90.0;
+        //double longitude = 0.0;
+
+        // Deserto do Saara
+        double latitude = 23.4162;
+        double longitude = 25.6628;
+
         var data = weatherProducerService.getWeather(latitude, longitude);
 
         try {
