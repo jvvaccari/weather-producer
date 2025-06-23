@@ -32,7 +32,7 @@ public class WeatherProducerController {
         return "API - Weather Producer";
     }
 
-    @Scheduled(fixedRate = 45000)
+    @Scheduled(fixedRate = 30000)
     public void fetchAndStoreWeather(
     ) {
         double latitude = 90.0;
