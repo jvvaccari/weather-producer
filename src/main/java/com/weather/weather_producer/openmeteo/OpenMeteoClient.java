@@ -54,13 +54,13 @@ public class OpenMeteoClient {
 
         try {
             JsonNode root = objectMapper.readTree(jsonResponse);
-            return parseHourly(root.get("hourly"));
+            return parseHourly(root.get("hourly"), latitude, longitude);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao processar resposta JSON", e);
         }
     }
 
-    private List<WeatherHourData> parseHourly(JsonNode hourly) {
+    private List<WeatherHourData> parseHourly(JsonNode hourly, double latitude, double longitude){
         List<WeatherHourData> list = new ArrayList<>();
         List<String> times = toList(hourly.get("time"));
         List<Double> temperature2m = toDoubleList(hourly.get("temperature_2m"));
@@ -94,7 +94,9 @@ public class OpenMeteoClient {
                     windSpeed.get(i),
                     cloudCover.get(i),
                     uvIndex.get(i),
-                    isDay.get(i) == 1
+                    isDay.get(i) == 1,
+                    latitude,
+                    longitude
             ));
         }
 
