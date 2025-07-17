@@ -15,6 +15,9 @@ public record WeatherHourData(
         double windSpeed10m,
         double cloudCover,
         double uvIndex,
-        boolean isDay
+        boolean isDay,
+        double latitude,
+        double longitude
 ) {
 }
+
